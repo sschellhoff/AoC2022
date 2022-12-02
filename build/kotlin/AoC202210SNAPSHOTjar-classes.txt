@@ -1,1 +1,0 @@
-/home/sschellhoff/dev/projects/AoC2022/build/classes/kotlin/main/Day01Kt.class:/home/sschellhoff/dev/projects/AoC2022/build/classes/kotlin/main/HelperKt.class:/home/sschellhoff/dev/projects/AoC2022/build/classes/kotlin/main/MainKt.class
