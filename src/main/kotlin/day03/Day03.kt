@@ -1,3 +1,5 @@
+package day03
+
 fun main() {
     println(input.lines().sumOf { it.rankDoubles() })
     println(input.lines().toTriples().sumOf { it.rank() })

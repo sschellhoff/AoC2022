@@ -1,3 +1,5 @@
+package day08
+
 fun main() {
     part1(testInput).let { result -> check(result == 21) { "'$result' found but expected '21'" } }
     println(part1(input))

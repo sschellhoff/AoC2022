@@ -1,3 +1,8 @@
+package day01
+
+import mapBlocks
+import sumLines
+
 fun main() {
     val caloriesPerElfDescending =
         input.mapBlocks { allElvesCalories -> allElvesCalories.sumLines() }.sortedDescending()

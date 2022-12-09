@@ -1,3 +1,5 @@
+package day02
+
 fun main() {
     println(input.lines().sumOf { rank(it) })
     println(input.lines().sumOf { rank2(it) })
@@ -33,7 +35,7 @@ fun rank2(turn: String): Int = when (turn) {
 rock = 1
 paper = 2
 scissor = 3
-a = x, b = y, c = z
+a = day09.getX, b = day09.getY, c = z
 lose = 0
 draw = 3
 win = 6

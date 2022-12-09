@@ -1,3 +1,5 @@
+package day04
+
 fun main() {
     println(input.lines().count { it.parseLine().doesOneContainTheOther() })
     println(input.lines().count { it.parseLine().let { (a, b) -> a.intersect(b).isNotEmpty() } })

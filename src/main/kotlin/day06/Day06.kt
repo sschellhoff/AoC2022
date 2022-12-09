@@ -1,3 +1,5 @@
+package day06
+
 import java.lang.IllegalArgumentException
 
 fun main() {

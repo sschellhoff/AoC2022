@@ -1,3 +1,5 @@
+package day07
+
 import java.util.*
 
 sealed interface FileSystem {
