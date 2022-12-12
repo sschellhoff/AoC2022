@@ -1,3 +1,5 @@
+import java.util.function.BiPredicate
+
 fun String.blocks(): List<String> = this.split("\n\n")
 
 inline fun <R> String.mapBlocks(transform: (String) -> R): List<R> = this.blocks().map { transform(it) }
@@ -10,4 +12,14 @@ fun <T> List<T>.penultimate(): T {
     if (size < 2)
         throw NoSuchElementException("List is empty.")
     return this[lastIndex - 1]
+}
+
+fun <T> List<T>.indicesFor(predicate: (T) -> Boolean): List<Int> {
+    val indices = mutableListOf<Int>()
+    this.forEachIndexed { index, element ->
+        if (predicate(element)) {
+            indices.add(index)
+        }
+    }
+    return indices
 }
