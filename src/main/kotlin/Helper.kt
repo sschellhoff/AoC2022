@@ -1,4 +1,3 @@
-import java.util.function.BiPredicate
 
 fun String.blocks(): List<String> = this.split("\n\n")
 
@@ -22,4 +21,10 @@ fun <T> List<T>.indicesFor(predicate: (T) -> Boolean): List<Int> {
         }
     }
     return indices
+}
+
+tailrec fun whileTrue(action: () -> Boolean) {
+    if (action()) {
+        whileTrue(action)
+    }
 }
