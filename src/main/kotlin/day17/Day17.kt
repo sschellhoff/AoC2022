@@ -1,12 +1,12 @@
 package day17
 
-
 fun main() {
     part1()
+    part2()
 }
 
 fun part1() {
-    val chamber = Chamber(Movement(testInput.toList()))
+    val chamber = Chamber(Movement(realInput.toList()))
     var rockIndex = 0
     repeat(2022) {
         chamber.addRock(rocks[rockIndex % rocks.size])
@@ -15,15 +15,90 @@ fun part1() {
     println(chamber.linesOfRocks())
 }
 
+fun part2() {
+    val movement = Movement(realInput.toList())
+    val chamber = Chamber(movement)
+    var rockIndex = 0
+    val hashs = mutableMapOf<Pair<Int, Int>, MutableList<Pair<Int, Int>>>()
+    (0L until 1000000000000L).forEach {
+        chamber.addRock(rocks[rockIndex % rocks.size])
+        rockIndex += 1
+        val hash = (rockIndex % rocks.size) to movement.currentIndex
+        if (hashs.containsKey(hash)) {
+            val foundStartsForHash = (hashs[hash]?.size ?: 0)
+            if (foundStartsForHash == 2) {
+                val cycles = mutableListOf(chamber.lastRockLineIndex to rockIndex)
+                cycles.addAll(hashs[hash]!!)
+                cycles.sortBy { it.first }
+                val (a, b, c) = cycles
+                val (aLine, aRocks) = a
+                val (bLine, bRocks) = b
+                val (cLine, cRocks) = c
+                if (bLine - aLine == cLine - bLine && isCycleAt(chamber, cLine, bLine)) {
+                    calculateSolution(bLine, aLine, bRocks, aRocks, cRocks, cLine, chamber, rockIndex)
+                    return
+                }
+
+            } else if (foundStartsForHash > 2) {
+                throw NotImplementedError("Not done because i don't need to")
+            }
+            hashs[hash]!!.add(chamber.lastRockLineIndex to rockIndex)
+
+        } else {
+            hashs[hash] = mutableListOf(chamber.lastRockLineIndex to rockIndex)
+        }
+    }
+}
+
+private fun calculateSolution(
+    bLine: Int,
+    aLine: Int,
+    bRocks: Int,
+    aRocks: Int,
+    cRocks: Int,
+    cLine: Int,
+    chamber: Chamber,
+    rockIndex: Int
+) {
+    val cycleLengthLines = bLine - aLine
+    val cycleLengthRocks = bRocks - aRocks
+    val rocksMissing = 1000000000000L - cRocks
+    val numberOfCycles = rocksMissing / cycleLengthRocks
+    val missingRocksAfterCycles = rocksMissing % cycleLengthRocks
+    val solution = numberOfCycles * cycleLengthLines + cLine + 1
+    val heightBefore = chamber.lastRockLineIndex
+    (0 until missingRocksAfterCycles).forEach { i ->
+        chamber.addRock(rocks[((rockIndex + i) % rocks.size).toInt()])
+    }
+    val heightAfter = chamber.lastRockLineIndex
+    println(solution + (heightAfter - heightBefore))
+}
+
+fun isCycleAt(chamber: Chamber, start1: Int, start2: Int): Boolean {
+    (0..1000).forEach {
+        if (chamber.lineAt(start1 - it) != chamber.lineAt(start2 - it)) {
+            return false
+        }
+    }
+    return true
+}
 
 class Chamber(private val movement: Movement) {
+    val lastRockLine: String
+        get() = data.findLast { it.contains('#') }!!.joinToString("")
+
+    fun lineAt(index: Int): String = data[index].joinToString("")
+
+    val lastRockLineIndex: Int
+        get() = data.indexOfLast { it.contains('#') }
+
     private var data: MutableList<MutableList<Char>> = MutableList(1) { MutableList(7) { '.' } }
     private var shrinkedBy: Long = 0L
 
     fun addRock(rock: List<String>) {
         prepareCave(rock)
         move(rock)
-        shrink()
+//        shrink()
     }
 
     private fun shrink() {
@@ -141,7 +216,8 @@ class Chamber(private val movement: Movement) {
 }
 
 data class Movement(private val moves: List<Char>) {
-    private var currentIndex = 0
+    var currentIndex = 0
+        private set
 
     fun getNext(): Char {
         return moves[currentIndex].also {
