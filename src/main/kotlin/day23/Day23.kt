@@ -53,8 +53,8 @@ fun firstHalf(elves: Set<Vector>, directionsToTest: ArrayDeque<Set<Vector>>): Pa
     val proposedPositionFrom = mutableMapOf<Vector, MutableList<Vector>>()
     var numberOfElvesWhoDontMove = 0L
     elves.forEach { originalPosition ->
-        val neighbourDirections = directionsToTest.flatten().toSet()
-        val directNeighbourPositions = neighbourDirections.map { it + originalPosition }.toSet()
+        val neighbourDirections = directionsToTest.flatten()
+        val directNeighbourPositions = neighbourDirections.map { it + originalPosition }
         val validDirections = if (directNeighbourPositions.intersect(elves).isEmpty()) {
             numberOfElvesWhoDontMove += 1
             null
